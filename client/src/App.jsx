@@ -10,6 +10,7 @@ const App = () => {
   return (
     <>
       <Header />
+    
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route exact path="/sign-in" element={<SignIn />} />
@@ -17,6 +18,7 @@ const App = () => {
         <Route exact path="/about" element={<About />} />
         <Route exact path="/profile" element={<Profile />} />
       </Routes>
+     
     </>
   );
 };
