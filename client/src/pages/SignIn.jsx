@@ -38,7 +38,7 @@ const SignIn = () => {
     navigate("/");
   };
 
-  console.log(formData);
+  
   return (
     <div className="max-w-lg mx-auto p-3">
       <h1 className="text-3xl font-bold text-center my-7">Sign In</h1>

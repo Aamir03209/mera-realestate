@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   getDownloadURL,
   getStorage,
@@ -7,15 +7,21 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+} from "../redux/user/userSlice";
 import { useRef } from "react";
 const Profile = () => {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(null);
-  const [form, setForm] = useState({});
-
+  const [form, setForm] = useState(null);
+  console.log(form)
   useEffect(() => {
     if (file) {
       FileUploadToGoogleStorage(file);
@@ -51,11 +57,45 @@ const Profile = () => {
       }
     );
   };
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.id]: e.target.value,
+    });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+    
+      console.log("user id",currentUser._id)
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+      
+      const data = await res.json();
+      console.log({data})
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+
+      dispatch(updateUserSuccess(data));
+     
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+    }
+  };
+
 
   return (
     <div className="max-w-lg mx-auto">
       <h1 className="text-3xl font-bold text-center my-7">Profile</h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
           type="file"
           ref={fileRef}
@@ -63,16 +103,16 @@ const Profile = () => {
           accept="image/*"
           onChange={(e) => setFile(e.target.files[0])}
         />
-       <img
-  className="rounded-full object-cover self-center mt-5 mb-2"
-  src={form.avatar || currentUser.avatar}
-  alt="profile"
-  onClick={() => fileRef.current.click()}
-  style={{
-    width: '150px', // Set your desired width
-    height: '150px', // Set your desired height
-  }}
-/>
+        <img
+          className="rounded-full object-cover self-center mt-5 mb-2"
+          src={form?.avatar || currentUser.avatar}
+          alt="profile"
+          onClick={() => fileRef.current.click()}
+          style={{
+            width: "120px", // Set your desired width
+            height: "120px", // Set your desired height
+          }}
+        />
 
         <p className="text-sm self-center">
           {fileUploadError ? (
@@ -80,9 +120,7 @@ const Profile = () => {
           ) : filePerc > 0 && filePerc < 100 ? (
             <span className=" bg-slate-700">Uploading... </span>
           ) : filePerc === 100 ? (
-            <span className=" text-green-700">
-              Image Uploaded successfully
-            </span>
+            <span className=" text-green-700">Image Uploaded successfully</span>
           ) : (
             ""
           )}
@@ -90,32 +128,39 @@ const Profile = () => {
         <input
           type="text"
           id="username"
+          defaultValue={currentUser.username}
           placeholder="Username"
-          className="rounded-lg
-        p-3 "
+          className="rounded-lg p-3 "
+          onChange={handleChange}
         />
         <input
           type="email"
           id="email"
+          defaultValue={currentUser.email}
           placeholder="Email"
-          className="rounded-lg
-        p-3 "
+          className="rounded-lg p-3 "
+          onChange={handleChange}
         />
         <input
           type="password"
           id="password"
           placeholder="Password"
-          className="rounded-lg
-        p-3 "
+          className="rounded-lg p-3 "
+          onChange={handleChange}
         />
-        <button className="bg-slate-700 text-white uppercase p-3 rounded-full cursor-pointer hover:opacity-95">
-          Update
+              <button
+          disabled={loading}
+          className='bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80'
+        >
+          {loading ? 'Loading...' : 'Update'}
         </button>
+
       </form>
       <div className="flex justify-between mt-5">
         <span className="text-red-700 cursor-pointer">Delete Account</span>
         <span className="text-red-700 cursor-pointer">Sign out</span>
       </div>
+      <p className=" text-red-700 text-center mt-4">{error ? error : ""}</p>
     </div>
   );
 };
