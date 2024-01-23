@@ -20,7 +20,8 @@ const Profile = () => {
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(null);
-  const [form, setForm] = useState(null);
+  const [form, setForm] = useState({});
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   console.log(form)
   useEffect(() => {
     if (file) {
@@ -85,6 +86,7 @@ const Profile = () => {
       }
 
       dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true)
      
     } catch (error) {
       dispatch(updateUserFailure(error.message));
@@ -161,6 +163,7 @@ const Profile = () => {
         <span className="text-red-700 cursor-pointer">Sign out</span>
       </div>
       <p className=" text-red-700 text-center mt-4">{error ? error : ""}</p>
+      <p className="text-green-700 mt-4 text-center">{updateSuccess ? 'User is updated successfully!' : ''}</p>
     </div>
   );
 };
