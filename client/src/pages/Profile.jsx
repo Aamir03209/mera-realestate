@@ -204,7 +204,7 @@ const handleSignOut= async ()=>{
       <p className=" text-red-700 text-center mt-4">{error ? error : ""}</p>
       <p className="text-green-700 mt-4 text-center">{updateSuccess ? 'User is updated successfully!' : ''}</p>
 
-      <p>{}</p>
+     
     </div>
   );
 };
