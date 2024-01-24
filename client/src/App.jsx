@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import CreateListing from "./pages/CreateListing";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -19,6 +20,8 @@ const App = () => {
         <Route exact path="/about" element={<About />} />
         <Route element={<Privatepage />}>
           <Route exact path="/profile" element={<Profile />} />
+          <Route exact path="/create-listing" element={<CreateListing />} />
+
         </Route>
       </Routes>
     </>

@@ -18,6 +18,7 @@ import {
   logoutUserSuccess,
   logoutUserStart
 } from "../redux/user/userSlice";
+import {Link} from 'react-router-dom'
 import { useRef } from "react";
 const Profile = () => {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -195,6 +196,9 @@ const handleSignOut= async ()=>{
         >
           {loading ? 'Loading...' : 'Update'}
         </button>
+        <Link to={"/create-listing"} className="bg-green-700 p-3 rounded-lg text-center uppercase hover:opacity-95 text-white">
+        Create Listing
+        </Link>
 
       </form>
       <div className="flex justify-between mt-5">
