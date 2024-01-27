@@ -9,8 +9,10 @@ export default function CreateListing() {
     imageUrls: []
   });
   const [imageUploadError, setImageUploadError] = useState(null);
+  const [uploading,setUploading]=useState(false)
   console.log(formData.imageUrls.length)
   const handleSubmitImages = () => {
+    setUploading(true)
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       const promises = [];
       for (let i = 0; i < files.length; i++) {
@@ -22,6 +24,7 @@ export default function CreateListing() {
             ...formData,
             imageUrls: formData.imageUrls.concat(urls)
           });
+          setUploading(false)
         })
         .catch((error) => {
           setImageUploadError("Image upload failed (2mb max per image)");
@@ -184,7 +187,7 @@ export default function CreateListing() {
             onChange={(e)=>setFiles(e.target.files)}
           />
           <button type="button" onClick={handleSubmitImages}  className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80">
-            Upload
+            {uploading ? "Uploading...":"Upload"}
           </button>
         </div>
         <p className="text-sm text-red-700">{imageUploadError&&imageUploadError}</p>
