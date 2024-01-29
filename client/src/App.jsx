@@ -22,7 +22,7 @@ const App = () => {
         <Route element={<Privatepage />}>
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/create-listing" element={<CreateListing />} />
-         {/* <Route exact path="/listing/:id" element={<ListingDetails />} />  */}
+          <Route exact path="/get/:listingId" element={<ListingDetails />} /> 
 
 
         </Route>
