@@ -142,6 +142,17 @@ const Profile = () => {
       setShowListingError(true);
     }
   };
+  const handleDeleteListing = async (id)=>{
+    try {
+      const res = await fetch(`/api/listing/delete/${id}`,{
+        method:'DELETE'
+      });
+      const data = await res.json();
+      setListings((prev)=> prev.filter((listing)=> listing._id!==id))
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className="max-w-lg mx-auto">
       <h1 className="text-3xl font-bold text-center my-7">Profile</h1>
@@ -232,6 +243,7 @@ const Profile = () => {
       >
         Show Listings
       </p>
+      <p className="text-red-700 text-center text-sm">{showListingError?"Error Showing Listings ":""}</p>
   
      {listings &&
         listings.length > 0 &&
@@ -256,7 +268,7 @@ const Profile = () => {
                   </p>
                 </Link>
                 <div className="flex flex-col items-center">
-                  <button className="text-red-700">Delete</button>
+                  <button className="text-red-700" onClick={()=>handleDeleteListing(listing._id)}>Delete</button>
                   <button className="text-green-700">Edit</button>
                 </div>
               </div>
