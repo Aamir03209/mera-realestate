@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import Privatepage from "./components/Privatepage";
 import ListingDetails from "./pages/ListingDetails";
+import Listing from "./pages/Listing";
 const App = () => {
   return (
     <>
@@ -19,6 +20,8 @@ const App = () => {
         <Route exact path="/sign-in" element={<SignIn />} />
         <Route exact path="/sign-up" element={<SignUp />} />
         <Route exact path="/about" element={<About />} />
+        <Route exact path="/listing/:listingId" element={<Listing />} />
+
         <Route element={<Privatepage />}>
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/create-listing" element={<CreateListing />} />

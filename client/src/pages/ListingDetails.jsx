@@ -155,6 +155,7 @@ export default function ListingDetails() {
       console.log(data)
       setIsLoading(false)
       setError(null)
+      navigate(`/listing/${data._id}`)
      } catch (error) {
        setError(error)
        setIsLoading(false)
