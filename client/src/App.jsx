@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import Privatepage from "./components/Privatepage";
 import ListingDetails from "./pages/ListingDetails";
+import Search from "./pages/Search";
 import Listing from "./pages/Listing";
 const App = () => {
   return (
@@ -21,6 +22,8 @@ const App = () => {
         <Route exact path="/sign-up" element={<SignUp />} />
         <Route exact path="/about" element={<About />} />
         <Route exact path="/listing/:listingId" element={<Listing />} />
+        <Route exact path="/search" element={<Search />} />
+
 
         <Route element={<Privatepage />}>
           <Route exact path="/profile" element={<Profile />} />
